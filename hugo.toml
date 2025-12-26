@@ -1,4 +1,4 @@
-baseURL = 'https://stefanciutac.github.io/'
+baseURL = 'https://stefanciutac.github.io/stefanciutac_devlog/'
 languageCode = 'en-gb'
 title = 'Exit Code: 0'
 theme = 'PaperMod'
@@ -6,3 +6,13 @@ theme = 'PaperMod'
 [params]
     defaultTheme = "auto"
     showCodeCopyButtons = true
+    [params.profileMode]
+    enabled = true
+    title = "Exit Code: 0"
+    subtitle = "Documenting my struggle against GCC"
+    [[params.profileMode.buttons]]
+        name = "Posts"
+        url = "posts"
+    [[params.profileMode.buttons]]
+        name = "GitHub"
+        url = "https://github.com/stefanciutac"
