@@ -1,0 +1,8 @@
+baseURL = 'https://stefanciutac.github.io/'
+languageCode = 'en-gb'
+title = 'Exit Code: 0'
+theme = 'PaperMod'
+
+[params]
+    defaultTheme = "auto"
+    showCodeCopyButtons = true
