@@ -1,3 +1,13 @@
+### **—**
+
+### **title: "Enter evoNN\_uttt"**
+
+### **date: 2026-04-01**
+
+### **draft: false**
+
+### **\---**
+
 ### **Introduction**
 
 It's 2026\. I shouldn't need to exert myself having fun playing board games when a computer can have fun for me. Enter: *evoNN-uttt* (catchy, I know) — a neural network trained to beat me at the game of 'Ultimate Tic-Tac-Toe'. 
