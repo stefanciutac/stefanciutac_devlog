@@ -1,16 +1,12 @@
 ---
-
-title: "#1: Enter evoNN_uttt"
-
+title: "evoNN_UTTT v0.1"
 date: 2026-04-01
-
 draft: false
-
 ---
 
 ### **Introduction**
 
-It's 2026. I shouldn't need to exert myself having fun playing board games when a computer can have fun for me. Enter: *evoNN-uttt* (catchy, I know) — a neural network trained to beat me at the game of 'Ultimate Tic-Tac-Toe'.
+It's 2026. I shouldn't need to exert myself having fun playing board games when a computer can have fun for me. Enter: *evoNN-uttt* — a neural network trained to beat me at the game of 'Ultimate Tic-Tac-Toe'.
 
 Aside from some brief experiments conducted a few months ago (consisting of optimising hyperparameters for a genetic algorithm that solved the pure knapsack problem), I do not have much experience with evolutionary algorithms (note: I will use the terms *evolutionary algorithm* and *genetic algorithm* interchangeably), so iterating on and optimising a library for running the algorithm efficiently should be an interesting learning experience.
 
@@ -18,7 +14,7 @@ Aside from some brief experiments conducted a few months ago (consisting of opti
 
 I concede that there are not, upon initial reflection, any particularly paradigm-changing use-cases for such a bot; its development, however, should certainly be of great educational value to me.
 
-Pedagogical benefits aside, I was inspired to begin this project by the great feats of Google Deepmind's *AlphaGo* and *AlphaZero* models, and the compelling scientific promise of their Nobel-prize-winning sibling: AlphaFold; through optimising game-playing bots, Deepmind gained valuable knowledge and experience, which were, no doubt, invaluable to their eventual development of AlphaFold. Similarly, I hope — through this series of experiments with a board-game-playing-bot — to develop versatile, modular, and (ideally) performant libraries on which I can build more useful projects in the future. For example, the development of a robust and modular library for efficiently training neural networks using genetic algorithms, might - when plugged into some use-case-specific reward function - allow noise-and-pertubation-resistant control policies for dynamic robotics to be generated.
+Pedagogical benefits aside, I was inspired to begin this project by the great feats of Google Deepmind's *AlphaGo* and *AlphaZero* models, and the compelling scientific promise of their Nobel-prize-winning sibling: _AlphaFold_; through optimising game-playing bots, Deepmind gained valuable knowledge and experience, which were, no doubt, invaluable to their eventual development of _AlphaFold_. Similarly, I hope — through this series of experiments with a board-game-playing-bot — to develop versatile, modular, and (ideally) performant libraries on which I can build more useful projects in the future. For example, the development of a robust and modular library for efficiently training neural networks using genetic algorithms, might - when plugged into some use-case-specific reward function - allow noise-and-pertubation-resistant control policies for dynamic robotics to be generated.
 
 ### **Architecture**
 
@@ -39,7 +35,7 @@ It should be noted that for this first version of the code, training is done for
 
 For the sake of simplicity, the `std::vector` of `Eigen::MatrixXd` is initialised completely randomly, using the `Eigen::MatrixXd::Random()` function. There is probably the potential to engineer the starting parameters to increase the rate of convergence, but that would require some more experimentation for a meaningful difference to be made - and certainly it will not be the bottleneck for efficiency in this first version.
 
-The `population\_size`, number of training `generations`, neural net `configuration`, and mutation rates have been selected based on very cursory experimentation, and there is definitely significant room for optimisation on this front. I intend to add an outer loop that crudely sweeps through a combination of these, or perhaps even a meta-genetic algorithm that optimises the hyperparameters, since they are interdependent rather than independent.
+The `population_size`, number of training `generations`, neural net `configuration`, and mutation rates have been selected based on very cursory experimentation, and there is definitely significant room for optimisation on this front. I intend to add an outer loop that crudely sweeps through a combination of these, or perhaps even a meta-genetic algorithm that optimises the hyperparameters, since they are interdependent rather than independent.
 
 #### *Error, Reward, and Evaluation*
 
@@ -48,9 +44,10 @@ The decision to choose a tournament ranking over some objective evaluation funct
 There are, however, some problems with the current implementation.
 
 1. The ‘true’ round-robin matchmaking algorithm results in a lack of evolutionary pressure for promising solutions, as they tend to win against the vast population of random movers, resulting in their placing in the higher percentiles, so winning/losing against the relatively few other promising solutions does not make too large of a difference on their mutation rate, causing a slow rate of convergence. This is also very slow for larger populations, as each tournament is *O(n2)*.
-
+   
    1. Instead, the population should be split by performance, with round-robin pairing within each segment of the population. This solution also vastly increases efficiency, as it is embarrassingly parallelisable.
-   2. A swiss pairing system would also be effective, as it significantly reduces the total number of games played, and removes the need for a potentially convoluted algorithm for determining how exactly the population should be split by performance.
+   2. A Swiss pairing system would also be effective, as it significantly reduces the total number of games played, and removes the need for a potentially convoluted algorithm for determining how exactly the population should be split by performance.
+
 2. The selection algorithm only receives a final ranking, and not individual point totals, so it is both difficult to differentiate between the performance of good solutions and difficult to ascertain where the boundary between statistically significant solutions and random movers lies.
 
 #### *Selection*
@@ -67,13 +64,15 @@ The main departure from the selection algorithm used in the aforementioned exper
 The current implementation is extremely rough-around-the-edges, with clear issues.
 
 1. The percentile cutoffs for each ‘level’ or ‘segment’ of the population, and hence for the mutation rates applied, are static, rather than adapting dynamically to the performance of agents in the population; this would cause the fix in *Error, Reward, and Evaluation: 1a* to fail, as the agent pools into which the population would be split would not be guaranteed to contain agents of roughly equal performance.
-
+   
    1. Ideally, the mutation rate should be determined separately for each agent based on their performance.
    2. For efficient round-robin matchmaking, some kind of algorithm (the workings of which are not yet known to me) would need to be devised to determine the agents that go in each player pool, likely reliant on the fix in *Error, Reward, and Evaluation: 2.*
-2. By necessity, given the framework I have chosen to implement, the effective culling of solutions that do not meet the percentile cutoff destroys partial solutions that have the potential to improve over several generations; the convergence rate is not as high as it could be, because the performance barrier that a new solution has to reach within a single generation (i.e. the quality of solution that has to be arrived upon purely by chance) to be preserved is high, so the frequency of new solutions is therefore probably quite low compared to a different architecture.
 
+2. By necessity, given the framework I have chosen to implement, the effective culling of solutions that do not meet the percentile cutoff destroys partial solutions that have the potential to improve over several generations; the convergence rate is not as high as it could be, because the performance barrier that a new solution has to reach within a single generation (i.e. the quality of solution that has to be arrived upon purely by chance) to be preserved is high, so the frequency of new solutions is therefore probably quite low compared to a different architecture.
+   
    1. A potential solution to this would, again, be the introduction of variability in mutation rate at the level of individual agents.
    2. The segmented-pool round-robin fix proposed in *Error, Reward, and Evaluation: 1* would also offer an improvement here.
+
 3. No logs are generated or population performance statistics captured, so it is very difficult to benchmark or debug the system.
 
 #### *Neural Network*
@@ -98,8 +97,6 @@ As discussed earlier, the hyperparameters in this version have not been optimise
 2. For the 3 mutation rates used in this version, values of `\[0.0001, 0.001, 0.5]` were tested successfully for `elite\_mutation\_rate`, `good\_mutation\_rate`, and `bad\_mutation\_rate`, respectively.
 3. The neural network, the parameters of which were encoded by each solution, had two hidden layers with 20 nodes in each. For the development of more advanced strategy and the potential for perfect play, this network size is, even in 3x3 naughts and crosses, perhaps a little on the low side; a network that is too big can drastically increase the convergence time, and perfect play on a 3x3 board can still likely be achieved with this configuration, given a well-designed-and-tuned selection algorithm and adequate training time.
 
-
-
 Please refer to this project’s GitHub repository for the source code.
 
 ### **Performance**
@@ -120,7 +117,22 @@ Overall, optimal play was discovered in a few particular variations, but play wa
 
 #### *Long-Training Test*
 
-A population of 250 agents was trained for 10,000 generations (\~320 hours on an Intel core i5-10500 CPU @ 3.10GHz, on a single thread), with mutation rates of `\[0.0001, 0.001, 0.5]` and a static global network configuration of `{9, 20, 20, 9)`. The solution ranked first after the final generation was tested.
+A population of 250 agents was trained for 10,000 generations (\~320 hours on an Intel core i5-10500 CPU @ 3.10GHz, on a single thread), with mutation rates of `[0.0001, 0.001, 0.5]` and a static global network configuration of `{9, 20, 20, 9}`. The solution ranked first after the final generation was tested.
 
-\[TRAINING ONGOING]
+[TRAINING ONGOING]
 
+
+
+### **Next Steps**
+
+There are many improvements and features that need to be implemented to make the system slightly less awful, but clearly not all of these can or should be implemented in one go. What follows is a list of the changes I have deemed most urgent, but it is by no means exhaustive.
+
+1. **Multithreading:** Implementing multithreading must be done immediately, since the testing of all other features can be made several times faster if training runs run across all cores, and training runs take a lot less time than they currently do. Ideally, to maintain system modularity, the multithreading implementation should be selection/tournament-agnostic.
+
+2. **Benchmarking:** A simple `Benchmark` class should be written, which evaluates the relative performance of solutions, quantitatively. The current plan for this is to have the solution passed to it play against a random mover in a _n_-game match (where _n_ is something like 1000), and return the win rate, normalised to the range [0,1]. The `play_human()` procedure should also be moved here, as it does not belong in the `tournament` class. This is not a perfect metric for performance, but - particularly in these early stages - it should serve to provide a generally representative, quantitative metric for comparison between solutions, allowing for objective evaluation of changes. 
+
+3. **Preservation of Solutions:** Currently, solutions are discarded as soon as the program ends. For the solutions to be useful and comparable between training runs, and for the potential implementation of transfer learning in the future, a mechanism for storing solutions/populations should be designed and implemented. Perhaps a simple `.CSV` file or something of the sort might be apt.
+
+4. **Swiss Tournaments:** Solutions being paired adversarially with others of similar calibre, and a clear relative ranking system being built into tournaments themselves, should improve both efficiency and performance. The implementation of benchmarking should allow for a detailed comparison between the two.
+
+These changes will likely be implemented and tested within the next few months, after which another devlog will be written, evaluating the resulting system.
