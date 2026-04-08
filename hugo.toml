@@ -1,4 +1,4 @@
-baseURL = 'https://github.com/stefanciutac/stefanciutac_devlog.git'
+baseURL = 'https://stefanciutac.github.io/stefanciutac_devlog/'
 languageCode = 'en-gb'
 title = 'Exit Code: 0'
 theme = 'PaperMod'
