@@ -43,7 +43,7 @@ The decision to choose a tournament ranking over some objective evaluation funct
 
 There are, however, some problems with the current implementation.
 
-1. The ‘true’ round-robin matchmaking algorithm results in a lack of evolutionary pressure for promising solutions, as they tend to win against the vast population of random movers, resulting in their placing in the higher percentiles, so winning/losing against the relatively few other promising solutions does not make too large of a difference on their mutation rate, causing a slow rate of convergence. This is also very slow for larger populations, as each tournament is *O(n2)*.
+1. The ‘true’ round-robin matchmaking algorithm results in a lack of evolutionary pressure for promising solutions, as they tend to win against the vast population of random movers, resulting in their placing in the higher percentiles, so winning/losing against the relatively few other promising solutions does not make too large of a difference on their mutation rate, causing a slow rate of convergence. This is also very slow for larger populations, as each tournament is *O(n<sup>2</sup>)*.
    
    1. Instead, the population should be split by performance, with round-robin pairing within each segment of the population. This solution also vastly increases efficiency, as it is embarrassingly parallelisable.
    2. A Swiss pairing system would also be effective, as it significantly reduces the total number of games played, and removes the need for a potentially convoluted algorithm for determining how exactly the population should be split by performance.
