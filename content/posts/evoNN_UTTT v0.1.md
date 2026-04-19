@@ -94,7 +94,7 @@ There are other options, of course, but I have decided that 81 input nodes and 8
 As discussed earlier, the hyperparameters in this version have not been optimised. However, after brief testing, it was determined that the following are vaguely effective.
 
 1. Obviously, as great a population size and number of generations as is tractable. Fair performance was obtained with a population of 200 running for 500 generations.
-2. For the 3 mutation rates used in this version, values of `\[0.0001, 0.001, 0.5]` were tested successfully for `elite\_mutation\_rate`, `good\_mutation\_rate`, and `bad\_mutation\_rate`, respectively.
+2. For the 3 mutation rates used in this version, values of `[0.0001, 0.001, 0.5]` were tested successfully for `elite_mutation_rate`, `good_mutation_rate`, and `bad_mutation_rate`, respectively.
 3. The neural network, the parameters of which were encoded by each solution, had two hidden layers with 20 nodes in each. For the development of more advanced strategy and the potential for perfect play, this network size is, even in 3x3 naughts and crosses, perhaps a little on the low side; a network that is too big can drastically increase the convergence time, and perfect play on a 3x3 board can still likely be achieved with this configuration, given a well-designed-and-tuned selection algorithm and adequate training time.
 
 Please refer to this project’s GitHub repository for the source code.
