@@ -119,9 +119,7 @@ Overall, optimal play was discovered in a few particular variations, but play wa
 
 A population of 250 agents was trained for 10,000 generations (\~320 hours on an Intel core i5-10500 CPU @ 3.10GHz, on a single thread), with mutation rates of `[0.0001, 0.001, 0.5]` and a static global network configuration of `{9, 20, 20, 9}`. The solution ranked first after the final generation was tested.
 
-[TRAINING ONGOING]
-
-
+Disappointingly, the performance of this solution was - qualitatively - exactly the same as that which ran for a fraction of the time. Due to the sheer length of time it took to run this test, I am writing this section after having implemented and tested two more major versions of the algorithm (including quantitative benchmarking), and, in short: the genetic diversity plummets almost immediately, in this version. Quantitative details will follow in the next devlog, but I have discovered that particular solutions begin to dominate the "gene pool" within aroun 50 generations, after which variation in solutions drops to nearly 0, and fitness plateaus, so it does not matter for how long you run it, because there is no more progress after the first 50-100 generations.
 
 ### **Next Steps**
 
