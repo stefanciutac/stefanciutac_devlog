@@ -9,7 +9,7 @@ Specifically, each state is informed by the previous state of the computer; no u
 
 The simplest example of this is the D-Type Latch: the most primitive unit of data storage in a computer.
 
-![D-Type Latch Diagram (Source: _But How Do It Know?_ by J Clark Scott, pg. 19)](d-type_latch.png)
+![D-Type Latch Diagram (Source: *But How Do It Know?* by J Clark Scott, pg. 19)](d-type_latch.png)
 
 One might expect it to function similarly to the electron trap in a solid-state drive, or more generally to toggle between two stable _physical_ states; however, even a cursory inspection of its construction reveals that the mechanism by which it stores data is recursive. In other words, it can be said that it is not the physical system itself that does the _storage_ of the bit—but in fact the interaction between these logical NAND functions.
 
