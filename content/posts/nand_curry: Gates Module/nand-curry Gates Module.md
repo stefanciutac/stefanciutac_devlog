@@ -17,7 +17,7 @@ Even (or perhaps, "especially for") for a module as simple as this, there are se
 
 ## Bit Representation
 
-Should bits be Boolean or integer values? It would most likely be marginally quicker to use Integers values should I find myself typing out bit strings for testing purposes; however, if we are being pedantic (which we are), logic gates are Boolean by definition: the inputs are permutations of the Boolean set, and the output is always a Boolean value. This does not actually mean anything, because we can simply define $\{0, 1\}$ to be the Boolean set, and it is equivalent to using $\{False, True\}$.
+Should bits be Boolean or integer values? It would most likely be marginally quicker to use integers should I find myself typing out bit strings for testing purposes; however, if we are being pedantic (which we are), logic gates are Boolean by definition: the inputs are permutations of the Boolean set, and the output is always a Boolean value. This does not actually mean anything, because we can simply define $\{0, 1\}$ to be the Boolean set, and it is equivalent to using $\{False, True\}$.
 
 Ultimately, I decided to use the latter of these two sets, because it means the type signatures of all of the functions I define are completely correct;
 
